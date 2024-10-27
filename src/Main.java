@@ -1,17 +1,28 @@
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
+
+
+
+
         //String folderPath = "D:/Oksana";
         File file = new File("D:/Oksana");
         long fileSize= getFolderSize(file);
 
+        System.out.println(fileSize);
+        String humanReadable = getHumanReadableSize(fileSize);
+        System.out.println(humanReadable);
+        long sizeFromHumanReadableSize = getSizeFromHumanReadableSize(humanReadable);
+        System.out.println(sizeFromHumanReadableSize);
+        System.exit(0);
 
-        System.out.println(getHumanReadableSize(fileSize));
+
 
     }
 
@@ -51,10 +62,10 @@ public class Main {
     public static String getHumanReadableSize(long size) {
         String strSize=" ";
         final int BYTE = 1024;
-        DecimalFormat df = new DecimalFormat("#.00");
+        //DecimalFormat df = new DecimalFormat("#.00");
         for(int factor=3; factor>0; factor--) {
             if(size/Math.pow(BYTE,factor)>=1) {
-                strSize = String.valueOf(df.format(size/Math.pow(BYTE,factor)));
+                strSize = String.valueOf(size/Math.pow(BYTE,factor));
                 if(factor==3) {strSize += "Gb"; }
                 else if(factor==2) {strSize += "Mb"; }
                 else if (factor==1) {strSize += "Kb"; }
@@ -73,12 +84,38 @@ public class Main {
     //TODO: 24B, 234Kb, 36Mb, 34Gb
     // 235K => 240640
     public static long getSizeFromHumanReadableSize(String size) {
+        HashMap<Character, Integer> valueMultiplier = valueMultiplier();
         char sizeFactor = size
-                .replaceAll("[^0-9\\s+]+", "")
+                .replaceAll("[^a-zA-Z]+", "")
                 .charAt(0);
-        return 0;
+        int multiplier = valueMultiplier.get(sizeFactor);
+        double doubleSize= Double.parseDouble(size.replaceAll("[a-zA-Z]+", ""));
+
+        long longSize = multiplier * (long)doubleSize;
+
+        return longSize;
 
     }
 
+    /*private static HashMap<Character, Integer> valueMultiplier() {
+        HashMap<Character, Integer> valueMultiplier = new HashMap<>();
+        valueMultiplier.put('B', 1);
+       valueMultiplier.put('K', 1024);
+       valueMultiplier.put('M', 1024*1024);
+       valueMultiplier.put('G', 1024*1024*1024);
+        return valueMultiplier;
+    } */
+
+    private static HashMap<Character, Integer> valueMultiplier() {
+        Character[] multipliers = {'B', 'K', 'M', 'G'};
+        HashMap<Character, Integer> valueMultiplier = new HashMap<>();
+        for(int i=0; i < multipliers.length; i++) {
+            valueMultiplier.put(
+                    multipliers[i],
+                    (int) Math.pow(1024,i)
+            );
+        }
+        return valueMultiplier;
+    }
 
 }
