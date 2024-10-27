@@ -3,30 +3,29 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main {
     public static void main(String[] args) {
 
 
 
-
-
         //String folderPath = "D:/Oksana";
         File file = new File("D:/Oksana");
-        long fileSize= getFolderSize(file);
+        Node root = new Node(file);
 
-        System.out.println(fileSize);
-        String humanReadable = getHumanReadableSize(fileSize);
-        System.out.println(humanReadable);
-        long sizeFromHumanReadableSize = getSizeFromHumanReadableSize(humanReadable);
-        System.out.println(sizeFromHumanReadableSize);
-        System.exit(0);
+        FolderSizeCalculator calculator = new FolderSizeCalculator(root);
+        ForkJoinPool pool = new ForkJoinPool();
+        long size = pool.invoke(calculator);
+        System.out.println(size);
+
 
 
 
     }
 
-    public static long getFolderSize(File folder) {
+  /*  public static long getFolderSize(Node node) {
+        File folder = node.getFolder();
         if(folder.isFile()) {
             return folder.length();
         }
@@ -35,8 +34,9 @@ public class Main {
         for(File file : files) {
             sum += getFolderSize(file);
         }
+        node.setSize(sum);
         return sum;
-    }
+    }*/
 
     public static List<String> getFoldersList(File folder) {
         List<String> foldersList = new ArrayList<>();
