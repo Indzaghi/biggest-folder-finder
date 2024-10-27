@@ -69,12 +69,9 @@ public class Main {
                 if(factor==3) {strSize += "Gb"; }
                 else if(factor==2) {strSize += "Mb"; }
                 else if (factor==1) {strSize += "Kb"; }
-                else {
-                    System.out.println("Something went wrong.");
-                }
                 break;
             } else  {
-                continue;
+                return size + "B";
             }
         }
         return strSize;
