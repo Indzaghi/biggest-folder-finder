@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 //для хранения папок и их размеров
 public class Node {
@@ -34,5 +35,12 @@ public class Node {
     public ArrayList<Node> getChildren() {
         return children;
     }
+
+    public String toString() {
+
+        return SizeCalculator.getHumanReadableSize(getSize());
+    }
+
+
 
 }
